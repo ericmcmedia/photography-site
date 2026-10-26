@@ -1,0 +1,50 @@
+---
+interface Props {
+  heading?: string;
+  text?: string;
+}
+
+const {
+  heading = 'Ready to create something bold?',
+  text = 'Tell me about your shoot. Portraits, events, couples, or video, in DeKalb, Chicago, or anywhere in the Midwest.',
+} = Astro.props;
+---
+
+<section class="section section--red book-cta" aria-labelledby="book-cta-heading">
+  <div class="container inner">
+    <div>
+      <p class="eyebrow">Let's work together</p>
+      <h2 id="book-cta-heading">{heading}</h2>
+      <p class="text">{text}</p>
+    </div>
+    <a class="btn btn--white" href="/contact/">Book a Session</a>
+  </div>
+</section>
+
+<style>
+  .inner {
+    display: grid;
+    gap: 1.5rem;
+    align-items: end;
+  }
+
+  h2 {
+    margin-bottom: 0.3em;
+  }
+
+  .text {
+    max-width: 38rem;
+    font-size: 1.125rem;
+    margin: 0;
+  }
+
+  .btn {
+    justify-self: start;
+  }
+
+  @media (min-width: 900px) {
+    .inner {
+      grid-template-columns: 1fr auto;
+    }
+  }
+</style>

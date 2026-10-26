@@ -1,0 +1,124 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BookCta from '../../components/BookCta.astro';
+import { categories } from '../../data/site';
+import { getPhotos } from '../../lib/galleries';
+
+const items = categories.map((c) => {
+  const photos = getPhotos(c.slug);
+  return { ...c, cover: photos[0], count: photos.length };
+});
+---
+
+<BaseLayout
+  title="Photo Galleries | DeKalb and Chicago Photographer"
+  description="Browse portrait, event, and couples photography by Eric McGill of EricMcMedia, a DeKalb, Illinois photographer serving Chicago and the Midwest."
+>
+  <header class="container page-head">
+    <p class="eyebrow">Portfolio</p>
+    <h1>Galleries</h1>
+    <p class="lead">Portraits, events, and couples from DeKalb, Chicago, and across the Midwest.</p>
+  </header>
+
+  <section class="container section--tight" aria-label="Gallery categories">
+    <ul class="list">
+      {
+        items.map((c) => (
+          <li>
+            <a href={`/galleries/${c.slug}/`} class="card">
+              {c.cover && (
+                <Image
+                  src={c.cover.src}
+                  alt=""
+                  widths={[480, 800, 1200]}
+                  sizes="(min-width: 900px) 33vw, 100vw"
+                  format="webp"
+                  quality={78}
+                />
+              )}
+              <span class="body">
+                <span class="title">{c.title}</span>
+                <span class="count">{c.count} photos</span>
+              </span>
+            </a>
+            <p>{c.blurb}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <BookCta />
+</BaseLayout>
+
+<style>
+  .list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  .card {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    background: var(--surface);
+    text-decoration: none;
+    margin-bottom: 1rem;
+    border-bottom: 6px solid var(--red);
+  }
+
+  .card :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .card:hover :global(img) {
+      transform: scale(1.04);
+    }
+  }
+
+  .body {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 3rem 1.25rem 1rem;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+  }
+
+  .title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 8vw, 3.5rem);
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+
+  .count {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+
+  .list p {
+    color: var(--muted);
+  }
+
+  @media (min-width: 900px) {
+    .list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

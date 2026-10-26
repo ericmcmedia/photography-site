@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import VideoEmbed from '../components/VideoEmbed.astro';
+import BookCta from '../components/BookCta.astro';
+import { videos } from '../data/site';
+---
+
+<BaseLayout
+  title="Video Production | DeKalb and Chicago Videographer"
+  description="Highlight reels, event recaps, and social video by Eric McGill of EricMcMedia, a DeKalb, Illinois videographer serving Chicago and the Midwest."
+>
+  <header class="container page-head">
+    <p class="eyebrow">Video</p>
+    <h1>Motion that moves people</h1>
+    <p class="lead">
+      Highlight reels, event recaps, and social content shaped by years of sports broadcast and newsroom work. One
+      highlight for Atlanta Vibe drew over 500K impressions on Instagram.
+    </p>
+  </header>
+
+  <section class="container section--tight" aria-label="Video work">
+    <div class="grid">
+      {videos.map((v) => <VideoEmbed {...v} />)}
+    </div>
+  </section>
+
+  <BookCta heading="Need video?" text="Event recaps, promos, and highlight reels starting at $250." />
+</BaseLayout>
+
+<style>
+  .grid {
+    display: grid;
+    gap: 3rem 1.5rem;
+  }
+
+  @media (min-width: 800px) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>
