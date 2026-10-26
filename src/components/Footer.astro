@@ -1,0 +1,160 @@
+---
+import { categories, nav, site } from '../data/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container grid">
+    <div class="brand">
+      <a class="logo" href="/">Eric<span>Mc</span>Media</a>
+      <p>
+        Photography, video, and editing by {site.name}. Based in {site.location}, working throughout the
+        Greater Chicago Area and traveling across the Midwest.
+      </p>
+    </div>
+
+    <nav aria-label="Footer">
+      <h2>Explore</h2>
+      <ul>
+        {
+          categories.map((c) => (
+            <li>
+              <a href={`/galleries/${c.slug}/`}>{c.title}</a>
+            </li>
+          ))
+        }
+        {
+          nav
+            .filter((n) => n.href !== '/galleries/')
+            .map((n) => (
+              <li>
+                <a href={n.href}>{n.label}</a>
+              </li>
+            ))
+        }
+        <li><a href="/contact/">Book a Session</a></li>
+      </ul>
+    </nav>
+
+    <div>
+      <h2>Connect</h2>
+      <ul class="connect">
+        <li>
+          <a href={site.instagram.url} rel="me noopener" target="_blank">
+            <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+              <circle cx="12" cy="12" r="4"></circle>
+              <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"></circle>
+            </svg>
+            <span>Instagram {site.instagram.handle}<span class="sr-only"> (opens in a new tab)</span></span>
+          </a>
+        </li>
+        <li>
+          <a href={`mailto:${site.email}`}>
+            <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="5" width="18" height="14" rx="1"></rect>
+              <path d="m3 7 9 6 9-6"></path>
+            </svg>
+            <span>{site.email}</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="container legal">
+    <p>&copy; {year} {site.brand}. All rights reserved.</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--ink);
+    border-top: 6px solid var(--red);
+    padding-top: clamp(3rem, 8vw, 5rem);
+    font-size: 0.9375rem;
+    color: var(--muted);
+  }
+
+  .grid {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  .logo {
+    display: inline-block;
+    margin-bottom: 1rem;
+    font-family: var(--font-display);
+    font-size: 2.25rem;
+    line-height: 1;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--white);
+  }
+
+  .logo span {
+    color: var(--red-text);
+  }
+
+  .brand p {
+    max-width: 26rem;
+  }
+
+  h2 {
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    color: var(--white);
+    margin-bottom: 1rem;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 2.5rem;
+    color: var(--muted);
+    text-decoration: none;
+  }
+
+  li a:hover {
+    color: var(--white);
+  }
+
+  .connect a {
+    color: var(--white);
+    font-weight: 600;
+  }
+
+  .connect a:hover {
+    color: var(--red-text);
+  }
+
+  .connect svg {
+    flex-shrink: 0;
+  }
+
+  .legal {
+    margin-top: 3rem;
+    padding-block: 1.5rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.8125rem;
+  }
+
+  .legal p {
+    margin: 0;
+  }
+
+  @media (min-width: 720px) {
+    .grid {
+      grid-template-columns: 2fr 1fr 1.4fr;
+    }
+  }
+</style>

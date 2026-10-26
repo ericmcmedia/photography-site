@@ -1,0 +1,109 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Gallery from '../../components/Gallery.astro';
+import BookCta from '../../components/BookCta.astro';
+import { categories } from '../../data/site';
+import { getPhotos } from '../../lib/galleries';
+
+export function getStaticPaths() {
+  return categories.map((category) => ({ params: { category: category.slug }, props: { category } }));
+}
+
+const { category } = Astro.props;
+const photos = getPhotos(category.slug);
+const others = categories.filter((c) => c.slug !== category.slug);
+---
+
+<BaseLayout title={`${category.title} Photography in DeKalb and Chicago`} description={category.description}>
+  <header class="container page-head">
+    <p class="eyebrow">Galleries</p>
+    <h1>{category.title}</h1>
+    <p class="lead">{category.blurb}</p>
+    <nav class="tabs" aria-label="Gallery categories">
+      {
+        categories.map((c) => (
+          <a href={`/galleries/${c.slug}/`} aria-current={c.slug === category.slug ? 'page' : undefined}>
+            {c.title}
+          </a>
+        ))
+      }
+    </nav>
+  </header>
+
+  <section class="container section--tight" aria-label={`${category.title} gallery`}>
+    {
+      photos.length ? (
+        <Gallery photos={photos} label={category.title} />
+      ) : (
+        <p class="lead">New {category.title.toLowerCase()} work is on the way. Check back soon.</p>
+      )
+    }
+  </section>
+
+  <BookCta
+    heading={`Book your ${category.title.toLowerCase()} session`}
+    text={`Love what you see? Let's plan your ${category.title.toLowerCase()} shoot in DeKalb, Chicago, or anywhere in the Midwest.`}
+  />
+
+  <nav class="container section--tight more" aria-label="More galleries">
+    <p class="eyebrow">Keep exploring</p>
+    <ul>
+      {
+        others.map((c) => (
+          <li>
+            <a href={`/galleries/${c.slug}/`}>{c.title}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</BaseLayout>
+
+<style>
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .tabs a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0.5rem 1.1rem;
+    border: 2px solid var(--line);
+    font-size: 0.8125rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .tabs a:hover {
+    border-color: var(--white);
+    color: var(--white);
+  }
+
+  .tabs a[aria-current='page'] {
+    background: var(--red);
+    border-color: var(--red);
+    color: var(--white);
+  }
+
+  .more ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2.5rem;
+  }
+
+  .more a {
+    font-family: var(--font-display);
+    font-size: clamp(2.25rem, 7vw, 3.5rem);
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+</style>

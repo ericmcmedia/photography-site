@@ -1,0 +1,136 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BookCta from '../components/BookCta.astro';
+import { services } from '../data/site';
+---
+
+<BaseLayout
+  title="Services and Pricing | DeKalb and Chicago Photography and Video"
+  description="Photography from $150, video from $250, and editing by inquiry. EricMcMedia serves DeKalb, the Greater Chicago Area, and the Midwest."
+>
+  <header class="container page-head">
+    <p class="eyebrow">Services</p>
+    <h1>What I do</h1>
+    <p class="lead">
+      Clear starting prices, fast turnaround, and a photojournalist's eye for the moment. Every project is quoted to
+      fit what you need.
+    </p>
+  </header>
+
+  <section class="container section--tight" aria-label="Services and pricing">
+    <ul class="list">
+      {
+        services.map((s, i) => (
+          <li id={s.id} class="card">
+            <span class="num" aria-hidden="true">
+              0{i + 1}
+            </span>
+            <h2>{s.title}</h2>
+            <p class="price">{s.price}</p>
+            <p class="summary">{s.summary}</p>
+            <ul class="details">
+              {s.details.map((d) => (
+                <li>{d}</li>
+              ))}
+            </ul>
+            <a class="btn" href={s.cta.href}>
+              {s.cta.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="note">
+      Based in DeKalb and available throughout the Greater Chicago Area. Planning a shoot somewhere else in the Midwest,
+      or have something custom in mind? <a href="/contact/">Send an inquiry</a> and I'll put together a quote.
+    </p>
+  </section>
+
+  <BookCta />
+</BaseLayout>
+
+<style>
+  .list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border-top: 6px solid var(--red);
+    padding: 2rem 1.5rem;
+  }
+
+  .num {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-family: var(--font-display);
+    font-size: 3rem;
+    line-height: 1;
+    color: #3a3a3a;
+  }
+
+  h2 {
+    font-size: clamp(2.5rem, 7vw, 3.25rem);
+    margin-bottom: 0.2em;
+  }
+
+  .price {
+    font-size: 1.125rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--red-text);
+  }
+
+  .summary {
+    font-size: 1.125rem;
+  }
+
+  .details {
+    margin: 0 0 2rem;
+    padding: 0;
+    list-style: none;
+    color: var(--muted);
+    flex-grow: 1;
+  }
+
+  .details li {
+    position: relative;
+    padding: 0.5rem 0 0.5rem 1.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .details li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 1.05rem;
+    width: 0.65rem;
+    height: 3px;
+    background: var(--red);
+  }
+
+  .btn {
+    align-self: flex-start;
+  }
+
+  .note {
+    margin-top: 2.5rem;
+    color: var(--muted);
+    max-width: 48rem;
+  }
+
+  @media (min-width: 960px) {
+    .list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

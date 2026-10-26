@@ -1,0 +1,294 @@
+/*
+  Brand tokens
+  --red        #C8102E  brand red. Use for fills, borders, buttons, and large display text.
+  --red-text   #FF4D5E  accessible red for small text on black (6.5:1). #C8102E on black is
+                        only 3.6:1, which fails WCAG AA for body sized text.
+  White on --red is 5.9:1, so white button labels on red pass AA.
+*/
+:root {
+  --red: #c8102e;
+  --red-dark: #9e0c24;
+  --red-text: #ff4d5e;
+  --black: #000;
+  --ink: #0b0b0b;
+  --surface: #141414;
+  --line: #2a2a2a;
+  --white: #fff;
+  --muted: #c4c4c4;
+
+  --font-display: 'Anton', 'Impact', 'Arial Narrow Bold', sans-serif;
+  --font-body: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+  --max: 1280px;
+  --header-h: 4rem;
+
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--header-h) + 1rem);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img,
+svg,
+video,
+iframe {
+  display: block;
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  margin: 0 0 0.5em;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: clamp(2.75rem, 10vw, 6.5rem);
+}
+
+h2 {
+  font-size: clamp(2.1rem, 6vw, 4rem);
+}
+
+h3 {
+  font-size: clamp(1.5rem, 3.5vw, 2rem);
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+a {
+  color: var(--white);
+  text-decoration-color: var(--red);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  color: var(--red-text);
+}
+
+:focus-visible {
+  outline: 3px solid var(--white);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px var(--red);
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -100px;
+  z-index: 100;
+  background: var(--white);
+  color: var(--black);
+  padding: 0.75rem 1rem;
+  font-weight: 700;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.section {
+  padding-block: clamp(3.5rem, 10vw, 7rem);
+}
+
+.section--tight {
+  padding-block: clamp(2.5rem, 6vw, 4rem);
+}
+
+.section--light {
+  background: var(--white);
+  color: var(--black);
+}
+
+.section--light a {
+  color: var(--black);
+}
+
+.section--light a:hover {
+  color: var(--red);
+}
+
+.section--red {
+  background: var(--red);
+  color: var(--white);
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--red-text);
+  margin: 0 0 1rem;
+}
+
+.eyebrow::before {
+  content: '';
+  width: 2.5rem;
+  height: 4px;
+  background: var(--red);
+}
+
+.section--light .eyebrow {
+  color: var(--red);
+}
+
+.section--red .eyebrow {
+  color: var(--white);
+}
+
+.section--red .eyebrow::before {
+  background: var(--white);
+}
+
+.lead {
+  font-size: clamp(1.125rem, 2.4vw, 1.375rem);
+  color: var(--muted);
+  max-width: 42rem;
+}
+
+.section--light .lead {
+  color: #333;
+}
+
+.accent {
+  color: var(--red-text);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 3.25rem;
+  padding: 0.9rem 1.75rem;
+  border: 2px solid var(--red);
+  background: var(--red);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.btn:hover {
+  background: var(--red-dark);
+  border-color: var(--red-dark);
+  color: var(--white);
+}
+
+.btn--ghost {
+  background: transparent;
+  border-color: var(--white);
+}
+
+.btn--ghost:hover {
+  background: var(--white);
+  border-color: var(--white);
+  color: var(--black);
+}
+
+.btn--white {
+  background: var(--white);
+  border-color: var(--white);
+  color: var(--black);
+}
+
+.btn--white:hover {
+  background: var(--black);
+  border-color: var(--black);
+  color: var(--white);
+}
+
+.section--light .btn,
+.section--light .btn:hover {
+  color: var(--white);
+}
+
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* Page heading block used on inner pages */
+.page-head {
+  padding-top: clamp(3rem, 9vw, 6rem);
+  padding-bottom: clamp(2rem, 5vw, 3rem);
+  border-bottom: 1px solid var(--line);
+}
+
+.page-head h1 {
+  margin-bottom: 0.25em;
+}

@@ -1,0 +1,334 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BookCta from '../components/BookCta.astro';
+import { categories, services, site } from '../data/site';
+import { getPhotos } from '../lib/galleries';
+import hero from '../assets/home/hero.jpg';
+
+// Featured work: the first photo from each gallery, then the second from each.
+const perCategory = categories.map((c) => ({ category: c, photos: getPhotos(c.slug) }));
+const featured = [0, 1]
+  .flatMap((i) => perCategory.map(({ category, photos }) => (photos[i] ? { category, photo: photos[i] } : null)))
+  .filter((f) => f !== null)
+  .slice(0, 6);
+
+const covers = perCategory.map(({ category, photos }) => ({ category, cover: photos[0] }));
+---
+
+<BaseLayout
+  title="EricMcMedia | DeKalb and Chicago Photographer and Videographer"
+  description="Bold portrait, event, and couples photography and video by Eric McGill. Based in DeKalb, Illinois and serving the Greater Chicago Area and the Midwest."
+>
+  <section class="hero" aria-labelledby="hero-heading">
+    <Image
+      src={hero}
+      alt=""
+      class="hero-img"
+      widths={[640, 960, 1280, 1920, 2400]}
+      sizes="100vw"
+      format="webp"
+      quality={80}
+      loading="eager"
+      fetchpriority="high"
+    />
+    <div class="hero-shade" aria-hidden="true"></div>
+    <div class="container hero-content">
+      <p class="eyebrow">DeKalb &bull; Chicago &bull; The Midwest</p>
+      <h1 id="hero-heading">
+        Bold images.<br />
+        <span class="hero-red">Real moments.</span><br />
+        Your story.
+      </h1>
+      <p class="hero-sub">Portraits, events, couples, and video by Eric McGill.</p>
+      <div class="btn-row">
+        <a class="btn" href="/contact/">Book a Session</a>
+        <a class="btn btn--ghost" href="/galleries/">View Galleries</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="featured-heading">
+    <div class="container">
+      <p class="eyebrow">Featured work</p>
+      <h2 id="featured-heading">Moments that hit different</h2>
+      <ul class="featured">
+        {
+          featured.map(({ category, photo }, i) => (
+            <li class={i === 0 ? 'wide' : ''}>
+              <a href={`/galleries/${category.slug}/`}>
+                <Image
+                  src={photo.src}
+                  alt={photo.alt}
+                  widths={[400, 640, 960, 1280]}
+                  sizes={i === 0 ? '(min-width: 900px) 66vw, 100vw' : '(min-width: 900px) 33vw, (min-width: 600px) 50vw, 100vw'}
+                  format="webp"
+                  quality={78}
+                />
+                <span class="tag">{category.title}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--light" aria-labelledby="galleries-heading">
+    <div class="container">
+      <p class="eyebrow">Galleries</p>
+      <h2 id="galleries-heading">Pick your story</h2>
+      <ul class="cats">
+        {
+          covers.map(({ category, cover }) => (
+            <li>
+              <a href={`/galleries/${category.slug}/`} class="cat">
+                {cover && (
+                  <Image
+                    src={cover.src}
+                    alt=""
+                    widths={[400, 640, 900]}
+                    sizes="(min-width: 900px) 33vw, 100vw"
+                    format="webp"
+                    quality={75}
+                  />
+                )}
+                <span class="cat-title">{category.title}</span>
+              </a>
+              <p>{category.blurb}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="services-heading">
+    <div class="container">
+      <p class="eyebrow">Services</p>
+      <h2 id="services-heading">Photo. Video. Edit.</h2>
+      <p class="lead">
+        {site.name} brings 8+ years behind the camera and newsroom speed to every shoot, from DeKalb to downtown
+        Chicago and across the Midwest.
+      </p>
+      <ul class="svc">
+        {
+          services.map((s) => (
+            <li>
+              <h3>{s.title}</h3>
+              <p class="price">{s.price}</p>
+              <p>{s.summary}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <a class="btn btn--ghost" href="/services/">See All Services</a>
+    </div>
+  </section>
+
+  <BookCta />
+</BaseLayout>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: min(92svh, 56rem);
+    display: grid;
+    align-items: end;
+    overflow: hidden;
+    background: var(--black);
+  }
+
+  .hero :global(.hero-img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero-shade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.55) 55%, rgba(0, 0, 0, 0.9) 100%);
+  }
+
+  .hero-content {
+    position: relative;
+    padding-block: 6rem clamp(3rem, 8vw, 6rem);
+  }
+
+  .hero h1 {
+    font-size: clamp(3.25rem, 13vw, 9rem);
+    line-height: 0.92;
+    margin-bottom: 0.3em;
+  }
+
+  /* Display size text, so brand red meets the 3:1 large text minimum; the
+     lighter tint keeps it comfortably above that over the photo. */
+  .hero-red {
+    color: var(--red-text);
+  }
+
+  .hero-sub {
+    font-size: clamp(1.125rem, 2.5vw, 1.375rem);
+    max-width: 34rem;
+    margin-bottom: 2rem;
+  }
+
+  .featured {
+    list-style: none;
+    margin: 2rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .featured a {
+    display: block;
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    background: var(--surface);
+  }
+
+  .featured :global(img) {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .tag {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background: var(--red);
+    color: var(--white);
+    padding: 0.4rem 0.8rem;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .featured a:hover :global(img),
+    .cat:hover :global(img) {
+      transform: scale(1.04);
+    }
+  }
+
+  @media (min-width: 600px) {
+    .featured {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 900px) {
+    .featured {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .featured .wide {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+
+    .featured .wide :global(img) {
+      aspect-ratio: auto;
+    }
+  }
+
+  .cats {
+    list-style: none;
+    margin: 2rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 2rem;
+  }
+
+  .cat {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    background: var(--black);
+    margin-bottom: 1rem;
+    text-decoration: none;
+  }
+
+  .cat :global(img) {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    opacity: 0.85;
+    transition: transform 0.4s ease;
+  }
+
+  .cat-title {
+    position: absolute;
+    left: 1rem;
+    bottom: 0.75rem;
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 7vw, 3.5rem);
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--white);
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
+  }
+
+  .cat:hover .cat-title {
+    color: var(--white);
+  }
+
+  .cat::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 6px;
+    background: var(--red);
+  }
+
+  @media (min-width: 900px) {
+    .cats {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .svc {
+    list-style: none;
+    margin: 2.5rem 0;
+    padding: 0;
+    display: grid;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+
+  .svc li {
+    background: var(--black);
+    padding: 1.75rem;
+  }
+
+  .price {
+    color: var(--red-text);
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.9375rem;
+  }
+
+  .svc p:last-child {
+    color: var(--muted);
+    margin: 0;
+  }
+
+  @media (min-width: 900px) {
+    .svc {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>
